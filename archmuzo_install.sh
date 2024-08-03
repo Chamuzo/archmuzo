@@ -74,6 +74,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 #Instalar diversos paquetes
 pacman -S networkmanager nano
 
+#Configurar red
+sudo systemctl enable NetworkManager
+sudo systemctl start NetworkManager
+
 # Salir del chroot
 exit
 EOF
