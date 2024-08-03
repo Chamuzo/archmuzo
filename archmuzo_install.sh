@@ -7,17 +7,19 @@ echo
 read -p "Introduce el nombre de la nueva cuenta de usuario (sudo): " username
 read -p "Introduce la contraseña del nuevo usuario: " -s user_password
 echo
+read -p "Introduce la partición EFI (por ejemplo, /dev/nvme0n1p1): " efi_partition
+read -p "Introduce la partición root (por ejemplo, /dev/nvme0n1p2): " root_partition
 
 # Formatear las particiones
 echo "Formateando las particiones..."
-mkfs.fat -F32 /dev/nvme0n1p1
-mkfs.ext4 /dev/nvme0n1p2
+mkfs.fat -F32 $efi_partition
+mkfs.ext4 $root_partition
 
 # Montar las particiones
 echo "Montando las particiones..."
-mount /dev/nvme0n1p2 /mnt
+mount $root_partition /mnt
 mkdir /mnt/boot
-mount /dev/nvme0n1p1 /mnt/boot
+mount $efi_partition /mnt/boot
 
 # Instalar el sistema base
 echo "Instalando el sistema base..."
