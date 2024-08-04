@@ -94,15 +94,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -S networkmanager nano
 
 #Configurar red
-sudo systemctl start NetworkManager
-sudo systemctl enable NetworkManager
+systemctl start NetworkManager
+systemctl enable NetworkManager
 
-# Instalar yay
-pacman -S --noconfirm git base-devel
-sudo -u $username git clone https://aur.archlinux.org/yay.git /home/$username/yay
-cd /home/$username/yay
-sudo -u $username makepkg -si --noconfirm
-cd /root
 
 # Salir del chroot
 exit
