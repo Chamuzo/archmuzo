@@ -9,17 +9,36 @@ read -p "Introduce la contraseña del nuevo usuario: " -s user_password
 echo
 read -p "Introduce la partición EFI (por ejemplo, /dev/nvme0n1p1): " efi_partition
 read -p "Introduce la partición root (por ejemplo, /dev/nvme0n1p2): " root_partition
+read -p "Introduce la partición home (deja en blanco si no hay): " home_partition
+read -p "Introduce la partición swap (deja en blanco si no hay): " swap_partition
 
 # Formatear las particiones
 echo "Formateando las particiones..."
 mkfs.fat -F32 $efi_partition
 mkfs.ext4 $root_partition
 
+if [ -n "$home_partition" ]; then
+    mkfs.ext4 $home_partition
+fi
+
+if [ -n "$swap_partition" ]; then
+    mkswap $swap_partition
+fi
+
 # Montar las particiones
 echo "Montando las particiones..."
 mount $root_partition /mnt
 mkdir /mnt/boot
 mount $efi_partition /mnt/boot
+
+if [ -n "$home_partition" ]; then
+    mkdir /mnt/home
+    mount $home_partition /mnt/home
+fi
+
+if [ -n "$swap_partition" ]; then
+    swapon $swap_partition
+fi
 
 # Instalar el sistema base
 echo "Instalando el sistema base..."
@@ -75,8 +94,15 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -S networkmanager nano
 
 #Configurar red
-sudo systemctl enable NetworkManager
 sudo systemctl start NetworkManager
+sudo systemctl enable NetworkManager
+
+# Instalar yay
+pacman -S --noconfirm git base-devel
+sudo -u $username git clone https://aur.archlinux.org/yay.git /home/$username/yay
+cd /home/$username/yay
+sudo -u $username makepkg -si --noconfirm
+cd /root
 
 # Salir del chroot
 exit
