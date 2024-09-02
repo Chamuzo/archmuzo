@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Desinstalar Sway y sus componentes
+sudo pacman -Rns --noconfirm sway swaybg swayidle swaylock
+
+# Desinstalar Wayfire y sus componentes
+sudo pacman -Rns --noconfirm wayfire wf-shell
+
+# Desinstalar River
+sudo pacman -Rns --noconfirm river
+
+# Desinstalar Hyprland
+sudo pacman -Rns --noconfirm hyprland
+
+# Desinstalar Newm
+sudo pacman -Rns --noconfirm newm
+
+# Desinstalar dependencias comunes instaladas
+sudo pacman -Rns --noconfirm xorg-xwayland xorg-xlsclients mesa alacritty
+
+# Eliminar configuraciones de los gestores de ventanas
+rm -rf ~/.config/sway
+rm -rf ~/.config/wayfire
+rm -rf ~/.config/river
+rm -rf ~/.config/hypr
+rm -rf ~/.config/newm
+
+# Restaurar ~/.bash_profile (eliminar la configuración que inicia el compositor automáticamente)
+if grep -q 'exec sway' ~/.bash_profile; then
+  sed -i '/exec sway/d' ~/.bash_profile
+fi
+if grep -q 'exec wayfire' ~/.bash_profile; then
+  sed -i '/exec wayfire/d' ~/.bash_profile
+fi
+if grep -q 'exec river' ~/.bash_profile; then
+  sed -i '/exec river/d' ~/.bash_profile
+fi
+if grep -q 'exec hyprland' ~/.bash_profile; then
+  sed -i '/exec hyprland/d' ~/.bash_profile
+fi
+if grep -q 'exec newm' ~/.bash_profile; then
+  sed -i '/exec newm/d' ~/.bash_profile
+fi
+
+# Mensaje final
+echo "Desinstalación completada. Los gestores de ventanas y sus configuraciones han sido eliminados."
