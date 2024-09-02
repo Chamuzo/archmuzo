@@ -6,8 +6,18 @@ sudo pacman -Syu --noconfirm
 # Instalar soporte para Wayland
 sudo pacman -S --noconfirm wayland xorg-xwayland xorg-xlsclients mesa
 
-# Instalar Newm
-sudo pacman -S --noconfirm newm
+# Instalar yay (si no está instalado)
+if ! command -v yay &> /dev/null; then
+    sudo pacman -S --needed git base-devel
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    cd ..
+    rm -rf yay
+fi
+
+# Instalar Newm desde AUR usando yay
+yay -S newm --noconfirm
 
 # Configuración básica para Newm
 mkdir -p ~/.config/newm
@@ -44,4 +54,3 @@ EOF
 # Recordatorio final
 echo "La instalación y configuración de Wayland, Newm, y SDDM está completa."
 echo "Puedes reiniciar tu sistema para iniciar sesión en la interfaz gráfica con Newm."
-
