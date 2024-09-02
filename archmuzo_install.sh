@@ -50,7 +50,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 # Chroot al nuevo sistema
 echo "Entrando en chroot..."
-arch-chroot /mnt /bin/bash <<EOF
+arch-chroot /mnt
 
 # Configurar la zona horaria
 ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
@@ -94,13 +94,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -S networkmanager nano
 
 #Configurar red
-systemctl start NetworkManager
 systemctl enable NetworkManager
-
 
 # Salir del chroot
 exit
-EOF
 
 # Desmontar las particiones y reiniciar
 echo "Desmontando las particiones..."
